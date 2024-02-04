@@ -4,12 +4,15 @@ import com.example.NeobisShopProject.dto.ProductDto;
 import com.example.NeobisShopProject.service.Impl.ProductServiceImpl;
 import com.example.NeobisShopProject.utils.ProductErrorResponse;
 import com.example.NeobisShopProject.utils.ProductNotCreatedException;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+@Tag(name = "Donuts", description = "All endpoints for all users to query products")
 
 @RestController
 @RequestMapping("/api/products")

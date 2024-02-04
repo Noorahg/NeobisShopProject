@@ -2,14 +2,14 @@ package com.example.NeobisShopProject.controller;
 
 import com.example.NeobisShopProject.dto.OrderDto;
 import com.example.NeobisShopProject.service.Impl.OrderServiceImpl;
-import com.example.NeobisShopProject.service.OrderService;
-import org.modelmapper.ModelMapper;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+@Tag(name = "Orders", description = "Controller for order objects")
 
 @RestController
 @RequestMapping("/api/orders")

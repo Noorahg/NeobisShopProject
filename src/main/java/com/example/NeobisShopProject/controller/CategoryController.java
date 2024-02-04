@@ -2,11 +2,13 @@ package com.example.NeobisShopProject.controller;
 
 import com.example.NeobisShopProject.dto.CategoryDto;
 import com.example.NeobisShopProject.service.Impl.CategoryServiceImpl;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+@Tag(name = "Category", description = "Controller for category objects")
 
 @RestController
 @RequestMapping("/api/categories")
