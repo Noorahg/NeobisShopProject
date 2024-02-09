@@ -12,7 +12,7 @@ import java.util.List;
 @Tag(name = "Orders_details", description = "Controller for order objects")
 
 @RestController
-@RequestMapping("/api/orderDetails")
+@RequestMapping("/auth/orderDetails")
 public class OrderDetailsController {
 
     private final OrderDetailsServiceImpl orderDetailsServiceImpl;

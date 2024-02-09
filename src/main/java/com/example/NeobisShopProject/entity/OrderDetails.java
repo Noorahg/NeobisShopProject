@@ -3,8 +3,7 @@ package com.example.NeobisShopProject.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

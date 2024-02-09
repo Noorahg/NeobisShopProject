@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 public interface OrderDetailsService {
     OrderDetailsDto createOrderDetails(OrderDetailsDto orderDetailsDto);
     List<OrderDetailsDto> getAllOrderDetails();
