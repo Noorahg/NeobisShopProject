@@ -9,8 +9,6 @@ import java.util.List;
 
 
 @Data
-@Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,7 +25,6 @@ public class Category {
     private String categoryName;
 
    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "category_id")
     @JsonIgnore
     private List<Product> products;
 }

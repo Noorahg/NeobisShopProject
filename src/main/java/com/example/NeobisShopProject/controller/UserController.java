@@ -1,6 +1,7 @@
 package com.example.NeobisShopProject.controller;
 
 import com.example.NeobisShopProject.dto.UserDto;
+import com.example.NeobisShopProject.entity.User;
 import com.example.NeobisShopProject.service.Impl.UserServiceImpl;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,7 @@ import java.util.List;
 @Tag(name = "Users", description = "Controller for customers")
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/auth")
 public class UserController {
 
     private final UserServiceImpl userServiceImpl;
@@ -21,9 +22,9 @@ public class UserController {
     }
 
    @PostMapping("/create")
-    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
-        UserDto createdUserDto = userServiceImpl.createUser(userDto);
-        return new ResponseEntity<>(createdUserDto, HttpStatus.CREATED);
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        User createdUser = userServiceImpl.createUser(user);
+        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
     @GetMapping("/all")

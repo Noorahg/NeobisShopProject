@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
 @Tag(name = "Donuts", description = "All endpoints for all users to query products")
 
 @RestController
-@RequestMapping("/api/products")
+@RequestMapping("/auth")
 
 public class ProductController {
     private final ProductServiceImpl productServiceImpl;
@@ -25,7 +26,8 @@ public class ProductController {
         this.productServiceImpl = productServiceImpl;
     }
 
-    @PostMapping("/createProduct")
+    @PostMapping("/admin/createProduct")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto productDto) {
         ProductDto createdProduct = productServiceImpl.createProduct(productDto);
         return new ResponseEntity<>(createdProduct, HttpStatus.CREATED);

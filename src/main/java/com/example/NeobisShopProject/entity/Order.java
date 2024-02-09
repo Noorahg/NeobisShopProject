@@ -35,6 +35,6 @@ public class Order {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private List<OrderDetails> details;
 
-   @ManyToOne(fetch = FetchType.EAGER, optional = false)
+      @ManyToOne(fetch = FetchType.EAGER, optional = false)
     private User user;
 }

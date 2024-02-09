@@ -1,6 +1,13 @@
 package com.example.NeobisShopProject.dto;
 
 import com.example.NeobisShopProject.enums.Role;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
 
 public class UserDto {
     private Long id;
@@ -13,5 +20,4 @@ public class UserDto {
     private Role role;
     private boolean active;
 
-    // Геттеры и сеттеры
 }
