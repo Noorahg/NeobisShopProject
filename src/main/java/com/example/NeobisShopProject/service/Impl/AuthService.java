@@ -30,7 +30,7 @@ public class AuthService {
                 .username(registrationRequest.getUsername())
                 .email(registrationRequest.getEmail())
                 .password(passwordEncoder.encode(registrationRequest.getPassword()))
-                .role(Role.ROLE_ADMIN)
+                .role(Role.ROLE_USER)
                 .build();
 
         userServiceImpl.createUser(user);

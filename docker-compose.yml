@@ -3,9 +3,9 @@ version: '3'
 services:
   postgres:
     ports:
-      - 5432
+      - 5433
     image: postgres:alpine
-    container_name: 'java-postgres'
+    container_name: 'postgres-0'
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: gulnur
