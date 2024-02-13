@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  postgres:
+    ports:
+      - 5432
+    image: postgres:alpine
+    container_name: 'java-postgres'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: gulnur
+      POSTGRES_DB: db_3week
+  app:
+    build:
+      context: ../../..
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+    container_name: 'postgres-0'
+    ports:
+      - 8080:8080
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5433/db_3week
+      SPRING_DATASOURCE_USERNAME: postgres
