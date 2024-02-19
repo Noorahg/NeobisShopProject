@@ -34,29 +34,37 @@ public class ProductController {
     }
 
     @GetMapping("/allProducts")
+    @PreAuthorize("hasRole('ROLE_USER')")
+
     public ResponseEntity<List<ProductDto>> getAllProducts() {
         List<ProductDto> products = productServiceImpl.getAllProducts();
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
     @GetMapping("/getProductById/{productId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+
     public ResponseEntity<ProductDto> getProductById(@PathVariable Long productId) {
         ProductDto product = productServiceImpl.getProductById(productId);
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
     @PutMapping("/updateProduct/{productId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+
     public ResponseEntity<ProductDto> updateProduct(@PathVariable Long productId, @RequestBody ProductDto productDto) {
         ProductDto updatedProduct = productServiceImpl.updateProduct(productId, productDto);
         return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
     }
 
     @DeleteMapping("/{productId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+
     public ResponseEntity<Void> deleteProduct(@PathVariable Long productId) {
         productServiceImpl.deleteProduct(productId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     @ExceptionHandler
-    private ResponseEntity<ProductErrorResponse>handleException(ProductNotCreatedException e){
+    public ResponseEntity<ProductErrorResponse>handleException(ProductNotCreatedException e){
         ProductErrorResponse response = new ProductErrorResponse(
             e.getMessage(),
         System.currentTimeMillis());

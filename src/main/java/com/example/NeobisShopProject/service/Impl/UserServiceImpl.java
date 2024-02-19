@@ -34,7 +34,9 @@ public class UserServiceImpl implements UserService {
         Optional<User> userOptional = userRepository.findByUsername(username);
         return userOptional.orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
     }
-
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
 
     public UserDetailsService userDetailsService() {
         return this::getByUsername;
@@ -97,8 +99,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(Long id) {
-        userRepository.deleteById(id);
+        // Проверяем, существует ли пользователь с данным ID
+        if (userRepository.existsById(id)) {
+            // Если пользователь существует, удаляем его
+            userRepository.deleteById(id);
+        } else {
+            // Если пользователь не существует, выбрасываем исключение
+            throw new RuntimeException("User not found");
+        }
     }
+
     @Override
     public ResponseEntity<Object> createUserAdmin(UserDto userDto) {
         try {
