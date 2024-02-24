@@ -24,14 +24,14 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SwaggerConfig {
 
-    @Value("${DonutShop.openapi.dev-url}")
-    private String shopUrl;
+    @Value("${DonutShop.swagger.dev-url}")
+  //  private String shopUrl;
 
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.example.NeobisShopProject.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.example.NeobisShopProject"))
                 .build()
                 .apiInfo(apiInfo())
                 .securitySchemes(List.of(apiToken()))
