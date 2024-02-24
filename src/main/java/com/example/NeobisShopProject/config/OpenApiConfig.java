@@ -24,8 +24,7 @@ import org.springframework.beans.factory.annotation.Value;
         ),
         servers = {
                 @Server(
-                        description = "Local environment",
-                        url = "http://localhost:8080"
+                        description = "Local environment"
                 )
         }
 )
