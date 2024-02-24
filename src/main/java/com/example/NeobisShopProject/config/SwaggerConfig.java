@@ -35,7 +35,6 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.example.NeobisShopProject.controller"))
-                .paths(PathSelectors.ant("/product/**")) // Adjust the path as needed
                 .build()
                 .apiInfo(apiInfo())
                 .securitySchemes(List.of(apiToken()));
