@@ -1,29 +1,31 @@
 package com.example.NeobisShopProject.config;
 
-import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
-import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import io.swagger.v3.oas.models.info.Contact;
 import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiKey;
+import springfox.documentation.service.AuthorizationScope;
+import springfox.documentation.service.SecurityReference;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import java.util.List;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 @EnableSwagger2
-@SecurityScheme(type = SecuritySchemeType.HTTP, name = "bearerAuth", scheme = "bearer")
-public class SwaggerConfig implements WebMvcConfigurer {
+public class SwaggerConfig {
 
     @Value("${DonutShop.openapi.dev-url}")
-   // private String shopUrl;
+    private String shopUrl;
 
     @Bean
     public Docket api() {
@@ -32,10 +34,16 @@ public class SwaggerConfig implements WebMvcConfigurer {
                 .apis(RequestHandlerSelectors.basePackage("com.example.NeobisShopProject.controller"))
                 .build()
                 .apiInfo(apiInfo())
-                .securitySchemes(List.of(apiToken()));
+                .securitySchemes(List.of(apiToken()))
+                .securityContexts(List.of(securityContext()));
     }
 
     private ApiInfo apiInfo() {
+        Contact contact = new Contact();
+        contact.setEmail("gulnuremilbekova2@gmail.com");
+        contact.setName("Gulnur");
+        contact.setUrl("https://github.com/Noorahg");
+
         return new ApiInfoBuilder()
                 .title("Spring Boot Shop API")
                 .version("1.0")
@@ -45,16 +53,21 @@ public class SwaggerConfig implements WebMvcConfigurer {
                 .build();
     }
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("swagger-ui.html")
-                .addResourceLocations("classpath:/META-INF/resources/");
-
-        registry.addResourceHandler("/webjars/**")
-                .addResourceLocations("classpath:/META-INF/resources/webjars/");
-    }
-
     private ApiKey apiToken() {
         return new ApiKey("apiToken", "x-api-token", "header");
+    }
+
+    private SecurityContext securityContext() {
+        return SecurityContext.builder()
+                .securityReferences(defaultAuth())
+                .forPaths(PathSelectors.any())
+                .build();
+    }
+
+    private List<SecurityReference> defaultAuth() {
+        AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
+        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
+        authorizationScopes[0] = authorizationScope;
+        return List.of(new SecurityReference("apiToken", authorizationScopes));
     }
 }
