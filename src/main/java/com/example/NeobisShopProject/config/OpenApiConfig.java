@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.OpenAPIDefinition;
         import io.swagger.v3.oas.annotations.info.Info;
         import io.swagger.v3.oas.annotations.security.SecurityScheme;
         import io.swagger.v3.oas.annotations.servers.Server;
+import org.springframework.beans.factory.annotation.Value;
 
 @OpenAPIDefinition(
         info = @Info(
@@ -38,4 +39,8 @@ import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 )
 
 public class OpenApiConfig {
+        @Value("${DonutShop.openapi.dev-url}")
+        private String shopUrl;
+
+
 }
