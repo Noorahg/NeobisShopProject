@@ -2,7 +2,6 @@ package com.example.NeobisShopProject.config;
 
 
 import com.example.NeobisShopProject.service.Impl.UserServiceImpl;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,10 +29,14 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final UserServiceImpl userServiceImpl;
+
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, UserServiceImpl userServiceImpl) {
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        this.userServiceImpl = userServiceImpl;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
