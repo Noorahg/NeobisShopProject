@@ -7,12 +7,13 @@ import com.example.NeobisShopProject.repository.UserRepository;
 import com.example.NeobisShopProject.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -24,11 +25,13 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     private final ModelMapper modelMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper) {
+    public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
+        this.passwordEncoder = passwordEncoder;
     }
     public User getByUsername(String username) {
         Optional<User> userOptional = userRepository.findByUsername(username);
@@ -53,17 +56,18 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
    @Override
-   public User createUser(User user) {
-       if (userRepository.existsByUsername(user.getUsername())) {
-           // Заменить на свои исключения
-           throw new RuntimeException("Пользователь с таким именем уже существует");
+   public ResponseEntity<Object> createUser(UserDto userDto) {
+       if (userRepository.findUserByEmail(userDto.getEmail()).isPresent()) {
+           return ResponseEntity.badRequest().body("User with email:" + userDto.getEmail() + " already exists!");
        }
 
-       if (userRepository.existsByEmail(user.getEmail())) {
-           throw new RuntimeException("Пользователь с таким email уже существует");
-       }
+       User user = modelMapper.map(userDto, User.class);
+       user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+       user.setRole(Role.ROLE_USER);
 
-       return userRepository.save(user);
+       userRepository.save(user);
+
+       return ResponseEntity.ok("User successfully created");
    }
 
     @Override
@@ -98,7 +102,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(Long id) {
+    public ResponseEntity<Object> deleteUser(Long id) {
         // Проверяем, существует ли пользователь с данным ID
         if (userRepository.existsById(id)) {
             // Если пользователь существует, удаляем его
@@ -107,28 +111,55 @@ public class UserServiceImpl implements UserService {
             // Если пользователь не существует, выбрасываем исключение
             throw new RuntimeException("User not found");
         }
+        return null;
     }
-
     @Override
-    public ResponseEntity<Object> createUserAdmin(UserDto userDto) {
-        try {
-            // Map UserDto to User entity
+    public ResponseEntity<Object> updateUserRequest(Long id, UserDto userDto) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+
+            // Use ModelMapper to map fields from UserDTO to the existing User entity
+            modelMapper.map(userDto, user);
+
+            userRepository.save(user);
+            return ResponseEntity.ok("User password was updated!");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @Override
+        public ResponseEntity<Object> createUserAdmin(UserDto userDto) {
+            // Check if user with email already exists
+            if (userRepository.findUserByEmail(userDto.getEmail()).isPresent()) {
+                return ResponseEntity.ok("User with email:"  + userDto.getEmail() +  " already exists!");
+            }
+
+            // Mapping UserDTO to User entity using ModelMapper
             User user = modelMapper.map(userDto, User.class);
 
-            // Save the user
-            User savedUser = userRepository.save(user);
+            // Save the user entity
+            userRepository.save(user);
 
-            // Map the saved user back to UserDto
-            UserDto savedUserDto = modelMapper.map(savedUser, UserDto.class);
-
-            // Return ResponseEntity with the saved user and HTTP status CREATED
-
-            return ResponseEntity.status(HttpStatus.CREATED).body(savedUserDto);
-        } catch (Exception e) {
-            // If any exception occurs during user creation, return ResponseEntity with error message and HTTP status BAD_REQUEST
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to create user: " + e.getMessage());
+            return ResponseEntity.ok("User successfully established");
         }
 
-}
+@Override
+    public ResponseEntity<Object> updateUserInfoById(Long id, UserDto userDto) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+
+            // Use ModelMapper to map fields from UserDTO to the existing User entity
+            modelMapper.map(userDto, user);
+
+            userRepository.save(user);
+
+            return ResponseEntity.ok("User info was updated");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }
 

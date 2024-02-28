@@ -6,13 +6,18 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 public interface UserService {
-   User createUser(User user);
-    public List<UserDto> getAllUsers() ;
-     public List<User> findAll() ;
+   ResponseEntity<Object> createUser(UserDto userdto);
+ ResponseEntity<Object> updateUserRequest(Long id, UserDto userDto);
 
-    UserDto getUserById(Long id);
-    UserDto updateUser(Long id, UserDto userDto);
-    void deleteUser(Long id);
-    public ResponseEntity<Object> createUserAdmin(UserDto userDto);
-}
+    List<User> findAll() ;
+    List<UserDto> getAllUsers();
+    UserDto updateUser(Long id, UserDto userDto) ;
+
+
+        UserDto getUserById(Long id);
+    ResponseEntity<Object> deleteUser(Long id);
+    ResponseEntity<Object> createUserAdmin(UserDto userDto);
+    ResponseEntity<Object> updateUserInfoById(Long id, UserDto userDto);
+
+    }
 

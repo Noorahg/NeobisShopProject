@@ -1,58 +1,41 @@
 package com.example.NeobisShopProject.controller;
 
 import com.example.NeobisShopProject.dto.UserDto;
-import com.example.NeobisShopProject.entity.User;
 import com.example.NeobisShopProject.service.Impl.UserServiceImpl;
+
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
-@Tag(name = "Users", description = "Controller for customers")
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/v1/users")
+@RequiredArgsConstructor
+@Tag(name = "User controller", description = "Uses for logic upon users")
 public class UserController {
-
     private final UserServiceImpl userServiceImpl;
-    @Autowired
-    public UserController(UserServiceImpl userServiceImpl) {
-        this.userServiceImpl = userServiceImpl;
+
+    @PostMapping("/createUser")
+    @PreAuthorize("hasAuthority('USER')")
+    @Operation(summary = "create user", description = "Create default user")
+    public ResponseEntity<Object> addUser(@RequestBody UserDto userDto) {
+        return userServiceImpl.createUser(userDto);
     }
 
-   @PostMapping("/create")
-   @PreAuthorize("hasRole('ROLE_USER')")
-
-   public ResponseEntity<User> createUser(@RequestBody User user) {
-        User createdUser = userServiceImpl.createUser(user);
-        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+    @PutMapping("/updateUserRequest/{id}")
+    @PreAuthorize("hasAuthority('USER')")
+    @Operation(summary = "update user request", description = "Update email and password for user")
+    public ResponseEntity<Object> updateUserRequestById(@PathVariable Long id,
+                                                        UserDto userDto) {
+        return userServiceImpl.updateUserRequest(id, userDto);
     }
 
-    @GetMapping("/all")
-    @PreAuthorize("hasRole('ROLE_USER')")
-
-    public ResponseEntity<List<UserDto>> getAllUsers() {
-        List<UserDto> userList = userServiceImpl.getAllUsers();
-        return new ResponseEntity<>(userList, HttpStatus.OK);
+    @PutMapping("/updateUserInfo/{id}")
+    @PreAuthorize("hasAnyAuthority('USER')")
+    @Operation(summary = "update user info", operationId = "Update user information, for example: firstname")
+    public ResponseEntity<Object> updateUserInfo(@PathVariable Long id, UserDto userDto) {
+        return userServiceImpl.updateUserInfoById(id, userDto);
     }
-
-    @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_USER')")
-
-    public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
-        UserDto userDto = userServiceImpl.getUserById(id);
-        return new ResponseEntity<>(userDto, HttpStatus.OK);
-    }
-
-    @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_USER')")
-
-    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody UserDto userDto) {
-        UserDto updatedUserDto = userServiceImpl.updateUser(id, userDto);
-        return new ResponseEntity<>(updatedUserDto, HttpStatus.OK);
-    }
-
 }
-

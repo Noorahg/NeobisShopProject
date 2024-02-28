@@ -1,4 +1,4 @@
-/*package com.example.NeobisShopProject.controller;
+package com.example.NeobisShopProject.controller;
 
 
 import com.example.NeobisShopProject.dto.UserDto;
@@ -18,7 +18,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Tag(name = "Admin controller", description = "Controller for ADMIN")
 public class AdminController {
-    //private final UserService service;
     private final UserServiceImpl userServiceImpl;
 
     @GetMapping("/allUsers")
@@ -49,4 +48,3 @@ public class AdminController {
         return userServiceImpl.deleteUser(id);
     }
 }
-*/

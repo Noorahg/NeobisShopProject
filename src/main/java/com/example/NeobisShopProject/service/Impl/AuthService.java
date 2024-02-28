@@ -7,18 +7,19 @@ import com.example.NeobisShopProject.dto.AuthenticationResponse;
 import com.example.NeobisShopProject.dto.RegistrationRequest;
 import com.example.NeobisShopProject.entity.User;
 import com.example.NeobisShopProject.enums.Role;
+import com.example.NeobisShopProject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
     private final UserServiceImpl userServiceImpl;
+    private final UserRepository userRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -33,7 +34,7 @@ public class AuthService {
                 .role(Role.ROLE_ADMIN)
                 .build();
 
-        userServiceImpl.createUser(user);
+        userRepository.save(user);
 
         var jwt = jwtService.generateToken(user);
         return new AuthenticationResponse(jwt);
