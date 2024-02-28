@@ -10,8 +10,6 @@ public interface UserService {
  ResponseEntity<Object> updateUserRequest(Long id, UserDto userDto);
 
     List<User> findAll() ;
-    List<UserDto> getAllUsers();
-    UserDto updateUser(Long id, UserDto userDto) ;
 
 
         UserDto getUserById(Long id);

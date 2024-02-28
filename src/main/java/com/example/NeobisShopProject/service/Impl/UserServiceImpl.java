@@ -17,7 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -70,13 +69,6 @@ public class UserServiceImpl implements UserService {
        return ResponseEntity.ok("User successfully created");
    }
 
-    @Override
-    public List<UserDto> getAllUsers() {
-        List<User> userList = userRepository.findAll();
-        return userList.stream()
-                .map(user -> modelMapper.map(user, UserDto.class))
-                .collect(Collectors.toList());
-    }
 
     @Override
     public UserDto getUserById(Long id) {
@@ -91,15 +83,7 @@ public class UserServiceImpl implements UserService {
 
 
 
-    @Override
-    public UserDto updateUser(Long id, UserDto userDto) {
-        User existingUser = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        modelMapper.map(userDto, existingUser); // Update existingUser fields
-        User updatedUser = userRepository.save(existingUser);
-        return modelMapper.map(updatedUser, UserDto.class);
-    }
 
     @Override
     public ResponseEntity<Object> deleteUser(Long id) {
