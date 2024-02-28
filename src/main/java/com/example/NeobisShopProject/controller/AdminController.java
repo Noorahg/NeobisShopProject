@@ -43,6 +43,7 @@ public class AdminController {
     }
 
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @Operation(summary = "delete user", description = "Delete user by id")
     public ResponseEntity<Object> deleteUser(@PathVariable Long id) {
         return userServiceImpl.deleteUser(id);
