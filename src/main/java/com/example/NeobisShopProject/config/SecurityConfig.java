@@ -1,20 +1,16 @@
 package com.example.NeobisShopProject.config;
 
 
-import com.example.NeobisShopProject.service.Impl.UserServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -31,11 +27,11 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @EnableMethodSecurity
 public class SecurityConfig extends WebSecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final UserServiceImpl userServiceImpl;
+    private final AuthenticationProvider authProvider;
 
-    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, UserServiceImpl userServiceImpl) {
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, AuthenticationProvider authProvider) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-        this.userServiceImpl = userServiceImpl;
+        this.authProvider = authProvider;
     }
 
     @Bean
@@ -57,22 +53,12 @@ public class SecurityConfig extends WebSecurityConfiguration {
 
                         .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
-                .authenticationProvider(authenticationProvider())
+                .authenticationProvider(authProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-    @Bean
-    public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userServiceImpl.userDetailsService());
-        authProvider.setPasswordEncoder(passwordEncoder());
-        return authProvider;
-    }
+
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
