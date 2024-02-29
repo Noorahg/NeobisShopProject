@@ -1,6 +1,7 @@
 package com.example.NeobisShopProject.controller;
 
 import com.example.NeobisShopProject.dto.UserDto;
+import com.example.NeobisShopProject.entity.User;
 import com.example.NeobisShopProject.service.Impl.UserServiceImpl;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,13 +11,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
 @Tag(name = "User controller", description = "Uses for logic upon users")
 public class UserController {
     private final UserServiceImpl userServiceImpl;
-
+    @GetMapping("/allUsers")
+    @PreAuthorize("hasRole('USER')")
+    @Operation(summary = "for get all users", description = "For get list users for ADMIN")
+    public List<User> getAll() {
+        System.out.println();
+        return userServiceImpl.findAll();
+    }
     @PostMapping("/createUser")
     @PreAuthorize("hasAuthority('USER')")
     @Operation(summary = "create user", description = "Create default user")

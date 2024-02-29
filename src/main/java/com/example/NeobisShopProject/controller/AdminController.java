@@ -20,13 +20,7 @@ import java.util.List;
 public class AdminController {
     private final UserServiceImpl userServiceImpl;
 
-    @GetMapping("/allUsers")
-    @PreAuthorize("hasRole('ADMIN')")
-    @Operation(summary = "for get all users", description = "For get list users for ADMIN")
-    public List<User> getAll() {
-        System.out.println();
-        return userServiceImpl.findAll();
-    }
+
 
     @PostMapping("/createUserAdmin")
     @PreAuthorize("hasAuthority('ADMIN')")
