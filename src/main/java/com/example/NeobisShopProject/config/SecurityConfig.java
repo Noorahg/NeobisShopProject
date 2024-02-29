@@ -49,7 +49,7 @@ public class SecurityConfig extends WebSecurityConfiguration {
                         .requestMatchers("/auth/**").permitAll() // Разрешить доступ к /auth/**
                         .requestMatchers("/swagger-ui/**", "/swagger-resources/**", "/v3/api-docs/**").permitAll() // Разрешить доступ к Swagger UI
                         .requestMatchers("/admin/**").hasRole("ROlE_ADMIN") // Требовать роль ROLE_ADMIN для доступа к /admin/**
-                        .requestMatchers("/users/**").hasRole("ROlE_USER") // Требовать роль ROLE_ADMIN для доступа к /admin/**
+                        .requestMatchers("/users/**").hasRole("ROlE_USER") // Требовать роль ROLE_USER для доступа к /users/**
 
                         .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
