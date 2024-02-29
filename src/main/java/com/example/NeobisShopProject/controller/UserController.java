@@ -21,7 +21,7 @@ public class UserController {
     private final UserServiceImpl userServiceImpl;
     @GetMapping("/allUsers")
     @PreAuthorize("hasRole('USER')")
-    @Operation(summary = "for get all users", description = "For get list users for ADMIN")
+    @Operation(summary = "for get all users", description = "For get list users for USER")
     public List<User> getAll() {
         System.out.println();
         return userServiceImpl.findAll();
