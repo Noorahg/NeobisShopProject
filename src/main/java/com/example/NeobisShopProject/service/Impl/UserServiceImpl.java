@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
         this.passwordEncoder = passwordEncoder;
     }
     public User getByUsername(String username) {
-        Optional<User> userOptional = userRepository.findByUsername(username);
+        Optional<User> userOptional = userRepository.findUserByUsername(username);
         return userOptional.orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
     }
     public List<User> findAll() {

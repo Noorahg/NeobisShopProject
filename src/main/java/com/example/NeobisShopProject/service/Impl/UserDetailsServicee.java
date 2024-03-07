@@ -34,12 +34,12 @@ public class UserDetailsServicee implements UserDetailsService {
     }*/
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        User user = userRepository.findUserByEmail(email).orElseThrow(
+        User user = userRepository.findUserByUsername(username).orElseThrow(
                 () -> new UserNotFoundException("User not found"));
 
-        return new org.springframework.security.core.userdetails.User(user.getEmail(),
+        return new org.springframework.security.core.userdetails.User(user.getUsername(),
                 user.getPassword(), user.getAuthorities());
     }
 }
