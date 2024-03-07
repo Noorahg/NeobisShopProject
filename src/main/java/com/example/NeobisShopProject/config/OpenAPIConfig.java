@@ -1,4 +1,4 @@
-/*
+
 package com.example.NeobisShopProject.config;
 
 import java.util.List;
@@ -57,4 +57,4 @@ public class OpenAPIConfig {
         }
 }
 
-*/
+
